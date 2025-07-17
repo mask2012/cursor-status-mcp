@@ -45,13 +45,23 @@ const server = http.createServer((req, res) => {
 
       statusHistory.push(statusEntry);
 
-      // 控制台输出
-      console.log("🎯 ===== CURSOR STATUS RECEIVED =====");
-      console.log(`📅 Time: ${timestamp}`);
-      console.log(`📝 Status: "${cursorStatus}"`);
-      console.log(`🌐 User-Agent: ${statusEntry.userAgent}`);
-      console.log(`🔗 IP: ${statusEntry.ip}`);
-      console.log("=====================================\n");
+      // 格式化时间为本地时区
+      const localTime = new Date()
+        .toLocaleString("zh-CN", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          fractionalSecondDigits: 2,
+          hour12: false,
+        })
+        .replace(/\//g, "-")
+        .replace(",", "");
+
+      // 控制台输出 - 只保留时间和状态
+      console.log(`${localTime} Status: "${cursorStatus}"`);
 
       // 响应
       res.writeHead(200, { "Content-Type": "application/json" });
