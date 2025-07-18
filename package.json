@@ -29,10 +29,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/cursor-status-mcp.git"
+    "url": "https://github.com/mask2012/cursor-status-mcp.git"
   },
-  "homepage": "https://github.com/yourusername/cursor-status-mcp#readme",
+  "homepage": "https://github.com/mask2012/cursor-status-mcp#readme",
   "bugs": {
-    "url": "https://github.com/yourusername/cursor-status-mcp/issues"
+    "url": "https://github.com/mask2012/cursor-status-mcp/issues"
   }
 }

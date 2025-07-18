@@ -6,9 +6,10 @@ A Model Context Protocol (MCP) server that provides a tool to set cursor status 
 
 When working in this project, always use the `set_cursor_status` tool to track current activities:
 
-1. **对话开始**: 使用状态 "对话开始"
-2. **对话结束**: 使用状态 "对话结束: [对话摘要]"
-3. **遇到错误**: 使用状态 "遇到错误: [错误描述]"
+## 规则
+
+- 单次对话开始时，首先调用 set_cursor_status 工具，使用状态 "工作中: [描述]"
+- 单次对话结束前，必须调用 set_cursor_status 工具，即使没有输出代码，即使只是想确认细节，只要输出停止了，就使用状态 "工作结束: [摘要]"
 
 ## Features
 
