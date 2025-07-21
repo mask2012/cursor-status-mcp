@@ -30,7 +30,7 @@
 
 此 mcp 提供一个工具 `set_cursor_status`, 通过规则让 cursor 在每次对话开始和结束时都调用这个工具，从而把 cursor 的状态传递出来
 
-这个工具内部只做一件事，就是发送一个 GET 请求到`http://127.0.0.1:4090/status?cursor-status=xxxx`
+这个工具内部只做一件事，就是发送一个 GET 请求到`http://127.0.0.1:4090/status?cursor_status=xxxx`
 
 接着另外编写客户端接收这个请求，并解析请求参数，从而实现对 cursor 状态的跟踪和展示
 
