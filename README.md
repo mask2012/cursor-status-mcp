@@ -1,41 +1,12 @@
-# cursor-status
+## 如何使用
 
-A Model Context Protocol (MCP) server that provides a tool to set cursor status via HTTP requests.
-
-## ⚠️ For Cursor AI Assistant
-
-When working in this project, always use the `set_cursor_status` tool to track current activities:
-
-## 规则
-
-- 单次对话开始时，首先调用 set_cursor_status 工具，使用状态 "工作中: [描述]"
-- 单次对话结束前，必须调用 set_cursor_status 工具，即使没有输出代码，即使只是想确认细节，只要输出停止了，就使用状态 "工作结束: [摘要]"
-
-## Features
-
-- Provides a `set_cursor_status` tool for MCP clients
-- Sends GET requests to a local status endpoint (`127.0.0.1:4090/status`)
-- Easy integration with Cursor IDE via MCP configuration
-
-## Installation
-
-Install globally via npm:
+1. 全局安装
 
 ```bash
-npm install -g cursor-status
+   npm install -g cursor-status
 ```
 
-Or use directly with npx (recommended):
-
-```bash
-npx cursor-status
-```
-
-## Usage
-
-### In Cursor IDE
-
-Add the following configuration to your Cursor MCP settings:
+2. mcp 里添加配置
 
 ```json
 {
@@ -48,56 +19,20 @@ Add the following configuration to your Cursor MCP settings:
 }
 ```
 
-### Available Tools
+## 规则
 
-#### `set_cursor_status`
+把如下规则放到 userRules 里就是全局生效，放到项目根目录下的.cursorrules 里就是项目内生效
 
-Sets the cursor status by sending a GET request to `http://127.0.0.1:4090/status`.
+- 单次对话开始时，首先调用 set_cursor_status 工具，使用状态 "工作中: [描述]"
+- 单次对话结束前，必须调用 set_cursor_status 工具，即使没有输出代码，即使只是想确认细节，只要输出停止了，就使用状态 "工作结束: [摘要]"
 
-**Parameters:**
+## 实现原理
 
-- `status` (string, required): The status message to set
+此 mcp 提供一个工具 `set_cursor_status`, 通过规则让 cursor 在每次对话开始和结束时都调用这个工具，从而把 cursor 的状态传递出来
 
-**Example usage:**
+这个工具内部只做一件事，就是发送一个 GET 请求到`http://127.0.0.1:4090/status?cursor-status=xxxx`
 
-```
-Use the set_cursor_status tool with status "Working on new feature"
-```
-
-This will send a GET request to:
-
-```
-http://127.0.0.1:4090/status?cursor_status=Working%20on%20new%20feature
-```
-
-## Requirements
-
-- Node.js 18 or higher
-- A local HTTP server running on `127.0.0.1:4090` that accepts GET requests to `/status` endpoint
-
-## Development
-
-Clone the repository and install dependencies:
-
-```bash
-git clone <your-repo-url>
-cd cursor-status
-npm install
-```
-
-Run the server:
-
-```bash
-npm start
-```
-
-## Error Handling
-
-The server provides detailed error messages for common issues:
-
-- Connection refused (server not running)
-- Request timeout (server not responding)
-- HTTP errors with status codes
+接着另外编写客户端接收这个请求，并解析请求参数，从而实现对 cursor 状态的跟踪和展示
 
 ## License
 

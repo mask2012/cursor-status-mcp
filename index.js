@@ -61,11 +61,17 @@ class CursorStatusServer {
 
       try {
         // Send GET request to the status endpoint
+        // 禁用代理，确保直接连接到本地服务器
         const response = await axios.get(`http://127.0.0.1:4090/status`, {
           params: {
             cursor_status: status,
           },
           timeout: 5000, // 5 second timeout
+          // 禁用代理设置
+          proxy: false,
+          // 额外的配置确保直接连接
+          httpsAgent: false,
+          httpAgent: false,
         });
 
         return {
@@ -81,6 +87,7 @@ class CursorStatusServer {
       } catch (error) {
         // Handle different types of errors
         let errorMessage = "Failed to set cursor status";
+        let errorDetails = "";
 
         if (error.code === "ECONNREFUSED") {
           errorMessage = "Connection refused - make sure the status server is running on 127.0.0.1:4090";
@@ -88,15 +95,17 @@ class CursorStatusServer {
           errorMessage = "Request timeout - the status server didn't respond within 5 seconds";
         } else if (error.response) {
           errorMessage = `HTTP ${error.response.status}: ${error.response.statusText}`;
+          errorDetails = `\nResponse data: ${JSON.stringify(error.response.data, null, 2)}`;
         } else {
           errorMessage = error.message;
+          errorDetails = `\nError code: ${error.code}\nError details: ${JSON.stringify(error, null, 2)}`;
         }
 
         return {
           content: [
             {
               type: "text",
-              text: `Error setting cursor status: ${errorMessage}`,
+              text: `Error setting cursor status: ${errorMessage}${errorDetails}`,
             },
           ],
           isError: true,
